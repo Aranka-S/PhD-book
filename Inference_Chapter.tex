@@ -1,0 +1,37 @@
+\chapter{Approximate inference in conditional random fields that represent  de Bruijn graphs}\label{ch3}
+\setlength{\epigraphrule}{0pt}
+\setlength{\epigraphwidth}{0.75\textwidth}
+\epigraph{\textit{I have always been more curious than wise}}{Amber - Ship of Magic, Robin Hobb}
+% vim: spell spelllang=en syntax=tex  tw=140
+
+
+In the development of detox \citep{Steyaert2020} we introduced a Conditional Random Field (CRF) model of the multiplicities of nodes and arcs in a de Bruijn graph. In \citep{Steyaert2020} we determined marginal probabilities of the multiplicity of a node or arc in the de Bruijn graph by constructing a CRF for a neighbourhood of nodes and arcs around the node/arc of interest. The Variable Elimination algorithm was then used to sum out all other variables in the CRF until only the marginal for the node/arc of interest remained.
+We see an increase in multiplicity determination accuracy as a larger neighbourhood is used. However, the use of exact inference techniques such as Variable Elimination, remains limited to small CRFs because of the large increase in runtime caused by adding more variables and, more importantly, by adding more connections to the model.
+
+For this reason we want to investigate the use of approximate inference techniques to compute marginal multiplicity probabilities. This could allow us to increase the neighbourhood size and allow us to infer the most likely multiplicity for multiple nodes and arcs simultaneously. Potentially, we could be able to perform computations for all nodes and arcs in a de Bruijn graph in a single approximate inference run, given a single CRF model for the whole graph.
+
+\section{Loopy belief propagation (BP)}
+
+The variable elimination algorithm is a dynamic programming view of efficient exact inference in a PGM. However, another view on exact inference called `message passing' or `belief propagation', allows us to extend exact inference methods to related approximate inference methods.
+
+Remember that the joint probability of a CRF can be written as a factorisation:
+\begin{equation}
+	P(\mathbf{Y}|\mathbf{X}) = \dfrac{1}{Z(\mathbf{X})}\prod_{i=1}^M \varphi_i(\mathbf{D}_i). \label{eq:joint}
+\end{equation}
+
+\paragraph{Clique tree or Junction tree:} A junction tree corresponding with the factorised joint probability of \eqref{eq:joint} is an undirected, acyclic graph $T = (V,E)$ with node labels $C_i \subseteq \mathbf{X} \cup \mathbf{Y}, \; \forall v_i \in V$, such that the following properties hold \cite{Aji2000} 
+\begin{enumerate}
+	\item $\forall \varphi_j(D_j)$ in the product \eqref{eq:joint} $\exists v_k \in V:\; D_j \subseteq C_k$. 
+	\item $\forall v_i,v_j \in V$: $C_i \cap C_j \subseteq C_k$ for all nodes $v_k \in V$ that lie on a path in T between $v_i$ and $v_j$.
+\end{enumerate} 
+
+\paragraph{Factor Graph:} 
+The factorisation in \eqref{eq:joint} can be represented with a bipartite graph. A first type of nodes represents the variables $Y$ and $X$, while a second type represents the factors $\varphi_i$. Edges in the graph represent the presence of a variable in the scope of a factor \cite{Kschischang2001}. This graph representation for a CRF, is slightly more expressive than the original CRF-graph representation: Several factorisations could lead to the same CRF-graph, while each factorisation has a unique factor graph (TODO: goede bron (evt Kschischang2001)).
+
+Inference in a PGM can be viewed as the passing of messages through the factor graph. Whenever the factor graph is a tree, this is equivalent to exact inference. When the factor graph contains cycles it can be transformed into a tree-structured graph on which the message passing algorithm is exact, but this comes at a, possibly very large, computational cost \citep{Yedidia2005}.
+
+Finding the (interior) stationary points of a constrained Bethe free energy problem is equivalent to finding Belief Propagation fixed points such that all beliefs are positive(\citep{Yedidia2005}, proof via Lagrange multipliers). A sufficient condition for beliefs to be positive is that there are no hard constraints i.e. there is no factor $\varphi_i$ such that $\varphi_i(\mathbf{D}_i)$ for an assignment of $\mathbf{D}_i$.
+
+\subsection{On the convergence of BP}
+If none of the factors in the CRF contain zero-entries, we can prove that there  will exist at least one fixed point of the Belief Propagation message passing scheme \citep{Yedidia2005}. Unfortunately, this gives us no guarantees whether the message passing algorithme will actually converge, this might only be the case for specific starting conditions. Nor does it guarantee that this fixed point is a good approximation of the true marginals one is trying to infer.
+

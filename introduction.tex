@@ -1,0 +1,68 @@
+\chapter{Introduction}\label{ch1}
+\setlength{\epigraphrule}{0pt}
+\setlength{\epigraphwidth}{0.75\textwidth}
+\epigraph{\textit{Got to find some nice quote \\ multiple lines even?}}{Anonymous}
+
+\section{Genomics, DNA and sequencing}
+
+\emph{Genomics} is the field of study that focuses on the genomes of all organisms. A \emph{genome} comprises the complete set of \acrshort{dna} that is contained in every cell of an organism. \emph{DNA or deoxyribonucleic acid} is a molecule that contains the instructions for the development, functioning  and reproduction of these organisms. Moreover, during reproduction DNA determines which information is passed on to the offspring. 
+
+DNA was first observed by Miescher in 1869. Almost a hunderd years later in 1953 Watson and Crick, aided by discoveries of Franklin and Wilkins, described the helicial structure of DNA \cite{Watson1953}. The helix consists of two strands of nucleotides. A \emph{nucleotide} contains a sugar- and phosphate-group, that form the backbone of the strand, and a nitrogen base. There are four different bases: \emph{\gls{a}}, \emph{\gls{g}} (the purine bases), \emph{\gls{t}} and \emph{\gls{c}} (the pyrimidine bases). Hydrogen bonds between two bases connect the two strands of the helix in such a way that A always pairs with T and G always pairs with C. Both strands are thus complementary, they contain the same information. This important property allows DNA to make copies of itself during reproduction. It also allows the production of a related molecule, RNA, that is in turn imporant for the production of prote\"ins. 
+
+The part of the DNA that is responsible for the production of prote\"ins is called the \emph{coding sequence}. Indeed, DNA can be viewed as a code made up of letters from a four-letter alphabet. Determining this code is an important first step in the understanding of the genome of an organism. The determination of the exact order of the bases that make up the DNA is called \emph{DNA sequencing}. A DNA strand has a certain directionality, its sequence is always expressed from the 5'-end to the 3'-end of the strand. The 5' end refers to the end that contains a phosphate group (bound to the fifth carbon atom of the sugar molecule), while the 3' end refers to the end that contains a hydroxyl group (bound to the third carbon atom of the sugar molecule). New unbound nucleotides will always bind at the 3' end by attaching their phosphate group to the hydroxyl group of the existing strand.
+Two strands of a DNA molecule lie anti-parallel, i.e.\ the 3' end of one strand will coincide with the 5' end of the other strand. Because of this, given a DNA sequence of one strand, the sequence of the second strand can be obtained by reading the read-string from back to front and replacing each nucleotide by its complement. This second string is refered to as the \emph{reverse complement}.
+
+\begin{figure}
+\centering
+\includegraphics[scale=0.15]{figures/dna_structure.jpg} 
+\caption{The structure of the DNA double-stranded helix. (source: \url{https://www.genome.gov/genetics-glossary/Deoxyribonucleic-Acid}) \todo{adapt this figure to also include 3' and 5'}}
+\end{figure}
+
+\subsection{A short history of DNA sequencing}
+
+The first DNA sequencing techniques were developed in the second half of the 1970's by Fredrick Sanger \cite{Sanger1977} on the one hand and by Maxam and Gilbert \cite{Maxam1977} on the other hand. Both these methods rely on obtaining pieces of the DNA sequence of all possible lengths while knowing which base occurs at the end of the sequence. By running these sequences through a gel that allows the shorter DNA fragments to move faster, the sequences are ordered by length and the full sequence can be inferred by reading through the gel. Sanger's method, now simply known as \emph{Sanger sequencing} became the most popular of the first generation sequencing techniques. In later years this technique wat further improved and automated such that it could be used to sequence the first human genome in the \emph{Human Genome Project} \cite{Venter2001}.
+
+In the begining of the the 21st century, new sequencing methods were developed collectively known as \emph{\gls{ngs}} or Massively-Parallel Sequencing methods. These techniques can perform a large number of sequencing reactions in parallel. This, in turn, led to a large decrease in the cost and time needed to sequence the genome of an organism. While the precise physics and chemistry behind the processes differs between platforms, a typical NGS experiment has the following steps: First, sequencing libraries are created by fragmenting the DNA. Secondly, these libraries have to be amplified to get a signal identifying a nucleotide in the fragment that is strong enough to be detected by sequencing. Several NGS sequencing techniques exist and were commercialised by different competitors such as pyrosequencing by Roche 454 \cite{Margulies2005}, sequencing by synthesis by Solexa/Illumina \cite{Turcatti2008}, sequencing by ligation by AB SOLiD \cite{Shendure2005} and ion semiconductor sequencing by Ion Torrent \cite{Rothberg2011}. However, these days the biggest player in the NGS market is Illumina, with around $90\%$ of all DNA data being produced by Illumina \cite{Illumina2016}.
+
+Recently, a third generation of sequencing technologies has arisen. These technologies separate themselves from NGS technologies by their capability of sequencing single molecules and obviating the need for amplification. These technologies are therefore often refered to as \gls{sms} technologies. The big players in the current SMS-market are Pacific Biosciences \cite{Eid2009} and Oxford Nanopore \cite{Clarke2009}.
+
+\subsection{The typical output of a sequencing experiment}
+
+There is, to today, no method to sequence a complete genome sequence at once. Instead only parts of the sequence are determined at a time. We refer to these parital DNA sequences as \emph{reads}. The length of a read, i.e.\ the number of sequenced nucleotides it contains, is often given in \emph{\gls{bp}}, because of the double-strandedness of DNA. By ensuring the different reads overlap, the full genome can then be inferred or \emph{assembled}. A task that is often compared to trying to solve a jigsaw puzzle of over a bilion pieces. In this context another important parameter of a sequencing experiment is the \emph{sequencing coverage} or \emph{coverage depth}, which is the number of reads that on average overlap with a nucleotide in the original sequence. Typically, some regions are harder to sequence than other and the actual coverage observed at different parts of the DNA sequence can differ significantly from this average coverage. Finally, errors might occur both during the preprocessing of the DNA (e.g.\ library construction and amplification) and during the actual sequencing itself. This can cause several artefacts in the data such as \emph{substitutions} (e.g.\ a nucleotide C in the DNA sequence might occur as G in the read), \emph{deletions} (part of the DNA sequence is missing in the read) or \emph{insertions} (the read contains nucleotides that are not present in the DNA sequence). Different sequencing techniques will often have different characteristic types of errors, as well as a difference in read length and average accuracy obtained.
+
+\section{Next Generation Sequencing Data}
+
+At the inception of next generation sequencing techniques, many different techniques and companies existed.
+Illumina's \gls{sbs} technique had serveral advantages. First, paired-end read data can be produced by sequencing both ends of the fragments. Because the original fragment length is known the distance between the read pairs can be estimated. This occurence of the reads in pairs with known distance between them has proven a valuable asset in downstream analyses of the sequencing data. Second, by adding barcodes to the adapters that are attached during library preparation, it is possible to simultaneously sequence multiple sample libraries in one machine run. This increased the throughput significantly.
+Nowadays, some platforms such as Roche/454 and AB SOLiD are no longer being developed and NGS data most often implies sequencing data produced by Illumina machines.
+% and downstream applications of the data can thus benefit by taking into account the biases and errors specific to Illumina data.
+
+\subsection{Generation: Illumina sequencing}
+
+Illumina library preparation is performed by first randomly fragmenting the DNA sample after which adapters are added to each end of the fragments. The fragments are amplified through a process called bridge-amplification: A flow cell is coated with primers that correspond with the adapters that were added to the fragments. The fragments are fixed to the flow cell as well and their free adapter binds to a complementary primer. This way fragments form a bridge that is copied by free nucleotides complementary to the sequence of the bridge fragment. This process is repeated to create clusters of copies of the DNA fragments. Such clusters are needed to make the light signal during the sequencing stage strong enough for accurate detection. The clusters are sequenced with a technique called \gls{sbs}. Sequencing is performed in cycles such that each cycle one new nucleotide in the sequence of each cluster is determined. In one cycle the sequences in the amplified library are used as templates to which a new (complementary) nucleotide that is labeled with a fluorescent dye, is added. Trough excitation with a laser a fluorescent signal is measured from all clusters which allows to identify the bases \cite{Illumina2010}.
+After some cycles the fluorescent signal will start to degrade because not all fluorescent dye from previous cycles is washed away properly, causing noise in the observations. Because of this the reads produced by Illumina sequencing are fairly short. Depending on the machine used, reads are between 50 and 300 \gls{bp} in length.
+
+\paragraph{Possible errors and biases in the reads}
+
+Illumina sequencing data has one of the lowest error rates compared to other sequencing technologies (\todo{find number}). However, some errors are still present. The most frequently made errors made by Illumina sequencing are substitutions. Errors can be caused by confounded fluorescent signal detection, for example because two of no fluorescently labeled nucleotides are attached during one cycle, thus sending out a different coloured signal (this phenomenon is often referred to as phasing). Additionally, errors can be introduced before sequencing by errors during PCR amplification \cite{Pfeiffer2018}. 
+What is more important, these errors often do not occur at random, but are biased towards certain parts of the DNA-sequence. Errors often occur more frequently near the end of the read and some types of substitutions occur more frequently than others (for example G replaced by T occurs more frequently). Moreover, certain motifs (sequences of 3 nucleotides) tend to precede an error and long sequences of the same nucleotide often insertions or deletions \cite{Schirmer2016}. 
+Finally another type of sequencing bias can occur, coverage bias implies that the reads are not uniformly distributed across the original genome. Genomic regions with for example low or high GC-content are known to suffer low coverage \cite{Ross2013}.
+
+To improve the detection of sequencing errors, Illumina provides a quality score for each \emph{base-call}.
+The quality score of a base in a read is defined as follows:
+If $p$ is the probability of an error in the base calling, then quality score $q$ is given by: \[
+	q = -10 \log_{10}(p)
+\]
+\todo{uitbreiden + stukje over hoe goed quality scores errors aangeven}
+
+\subsection{Storage: FastQ format}
+
+\subsection{Analysis: de Bruijn graphs}
+
+\section{Probabilistic graphical models}
+
+\subsection{Representation}
+
+\subsection{Inference}
+
+% vim: spell spelllang=en  tw=140
